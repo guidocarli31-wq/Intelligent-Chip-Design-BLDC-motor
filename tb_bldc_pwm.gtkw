@@ -1,0 +1,73 @@
+[*]
+[*] GTKWave save file for tb_bldc_pwm  --  BLDC PWM Custom IP
+[*]
+[dumpfile] "tb_bldc_pwm.vcd"
+[savefile] "tb_bldc_pwm.gtkw"
+[timestart] 0
+[size] 1600 900
+[pos] -1 -1
+*-0 0 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_bldc_pwm.
+[treeopen] tb_bldc_pwm.dut.
+[treeopen] tb_bldc_pwm.dut.u_timer.
+[treeopen] tb_bldc_pwm.dut.u_inj.
+[sst_width] 270
+[signals_width] 320
+[sst_expanded] 1
+[sst_vpaned_height] 350
+@200
+-=== CLOCK / RESET ===
+@28
+tb_bldc_pwm.clk
+tb_bldc_pwm.rst_n
+@200
+-=== PWM OUTPUTS (split bits) ===
+@28
+tb_bldc_pwm.pwm_out[0]
+tb_bldc_pwm.pwm_out[1]
+tb_bldc_pwm.pwm_out[2]
+tb_bldc_pwm.pwm_out[3]
+tb_bldc_pwm.pwm_out[4]
+tb_bldc_pwm.pwm_out[5]
+@22
+tb_bldc_pwm.pwm_out[5:0]
+@200
+-=== TIMER (counter / update event) ===
+@8022
+tb_bldc_pwm.dut.u_timer.cnt_r[15:0]
+@28
+tb_bldc_pwm.dut.u_timer.dir_r
+tb_bldc_pwm.dut.u_timer.uev
+@200
+-=== ACTIVE COMPARES U/V/W (shadow) ===
+@8022
+tb_bldc_pwm.dut.u_timer.s0[15:0]
+tb_bldc_pwm.dut.u_timer.s2[15:0]
+tb_bldc_pwm.dut.u_timer.s4[15:0]
+@200
+-=== DEAD-TIME DETAIL (phase U) ===
+@28
+tb_bldc_pwm.dut.u_timer.u_dt_u.ref_in
+tb_bldc_pwm.dut.u_timer.u_dt_u.oh
+tb_bldc_pwm.dut.u_timer.u_dt_u.ol
+@200
+-=== BREAK / INTERRUPT ===
+@28
+tb_bldc_pwm.brk_in
+tb_bldc_pwm.dut.brk_sync
+tb_bldc_pwm.dut.bif
+tb_bldc_pwm.dut.uif
+tb_bldc_pwm.irq
+@200
+-=== AUTO SINE / SVPWM INJECTOR ===
+@8022
+tb_bldc_pwm.dut.u_inj.ocr_u[15:0]
+tb_bldc_pwm.dut.u_inj.ocr_v[15:0]
+tb_bldc_pwm.dut.u_inj.ocr_w[15:0]
+tb_bldc_pwm.dut.u_inj.phase[31:0]
+@200
+-=== CONTROL REGISTER ===
+@22
+tb_bldc_pwm.dut.ctrl[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

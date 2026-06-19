@@ -4,10 +4,10 @@
 // Run (Icarus Verilog), from this sim/ directory so the .hex LUTs are found:
 //     iverilog -g2012 -o sim.out ../rtl/*.v tb_bldc_pwm.v
 //     vvp sim.out
-//     gtkwave tb_bldc_pwm.vcd      (optional)
+//     gtkwave tb_bldc_pwm.vcd tb_bldc_pwm.gtkw
 //
 // Exercises: manual complementary PWM + dead-time, BREAK shutdown,
-// and automatic sine/SVPWM injection.
+// automatic SINE injection, then automatic SVPWM injection.
 //============================================================================
 `timescale 1ns/1ps
 module tb_bldc_pwm;
@@ -132,15 +132,30 @@ module tb_bldc_pwm;
         repeat (200) @(posedge clk);
 
         //----------------------------------------------------------------
-        // TEST 3 : automatic sine / SVPWM injection
+        // TEST 3 : automatic SINE injection (visible electrical periods)
+        //   center-aligned, ARR=199 -> UEV every 398 clk (~4 us @100MHz)
+        //   SFREQ = 2^32/32 -> 32 UEV per electrical period
+        //   40000 clk ~ 3 electrical periods, clearly visible on OCR_U/V/W
         //----------------------------------------------------------------
-        icb_write(SAMP,  32'd90);          // amplitude (drive strength)
-        icb_write(SFREQ, 32'd20000000);    // phase step (speed)
-        // CTRL: EN|MOE|CMS|AUTO|PRELOAD|SVPWM
-        icb_write(CTRL, (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4)|(1<<10));
-        repeat (4000) @(posedge clk);
+        icb_write(CTRL,  32'h0);           // stop while reconfiguring
+        icb_write(PSC,   32'd0);
+        icb_write(ARR,   32'd199);
+        icb_write(DTG,   32'h00_08_08_08);
+        icb_write(SAMP,  32'd70);          // drive strength (modulation depth)
+        icb_write(SFREQ, 32'd134217728);   // 2^32 / 32  (speed)
+        // CTRL: EN|MOE|CMS|AUTO|PRELOAD  (pure sine, no SVPWM bit)
+        icb_write(CTRL, (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4));
+        repeat (40000) @(posedge clk);
         icb_read(CNT, rdbk);
-        $display("[%0t] running auto-inject, CNT=%0d", $time, rdbk);
+        $display("[%0t] auto-inject SINE running, CNT=%0d", $time, rdbk);
+
+        //----------------------------------------------------------------
+        // TEST 4 : switch to hardware SVPWM (third-harmonic) injection
+        //----------------------------------------------------------------
+        $display("[%0t] switching to SVPWM table", $time);
+        icb_write(CTRL, (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4)|(1<<10));
+        repeat (40000) @(posedge clk);
+        $display("[%0t] auto-inject SVPWM running", $time);
 
         $display("[%0t] shoot-through violations = %0d (expect 0)", $time, shoot);
         $display("TEST DONE");
