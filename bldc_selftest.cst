@@ -1,0 +1,35 @@
+// ==========================================================================
+// bldc_selftest.cst  -- Gowin physical constraints for bldc_selftest_top
+//                       on the Sipeed Tang Primer 20K.
+//
+// ⚠ THE PIN NAMES BELOW ARE PLACEHOLDERS. Replace each "PIN_xx" with the real
+//   pad from the Tang Primer 20K pinout / schematic (Sipeed wiki) for the
+//   header you wire to. The clock and LED pads are on the SOM+dock; the pwm
+//   outputs go to whichever GPIO header pins you route to the scope / driver.
+//
+//   Format:  IO_LOC "<port>" <PAD>;  and optional IO_PORT for the I/O standard.
+// ==========================================================================
+
+// ---- 27 MHz clock (Tang Primer 20K oscillator) ----
+IO_LOC  "clk_in"   PIN_CLK;
+IO_PORT "clk_in"   IO_TYPE=LVCMOS33;
+
+// ---- reset button (active-low). Tie high in RTL if you don't wire one ----
+IO_LOC  "rst_btn_n" PIN_RSTBTN;
+IO_PORT "rst_btn_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
+// ---- 6 PWM outputs -> scope header / gate-driver logic inputs ----
+IO_LOC  "pwm_out[0]" PIN_UH;   IO_PORT "pwm_out[0]" IO_TYPE=LVCMOS33 DRIVE=8;  // U high
+IO_LOC  "pwm_out[1]" PIN_UL;   IO_PORT "pwm_out[1]" IO_TYPE=LVCMOS33 DRIVE=8;  // U low
+IO_LOC  "pwm_out[2]" PIN_VH;   IO_PORT "pwm_out[2]" IO_TYPE=LVCMOS33 DRIVE=8;  // V high
+IO_LOC  "pwm_out[3]" PIN_VL;   IO_PORT "pwm_out[3]" IO_TYPE=LVCMOS33 DRIVE=8;  // V low
+IO_LOC  "pwm_out[4]" PIN_WH;   IO_PORT "pwm_out[4]" IO_TYPE=LVCMOS33 DRIVE=8;  // W high
+IO_LOC  "pwm_out[5]" PIN_WL;   IO_PORT "pwm_out[5]" IO_TYPE=LVCMOS33 DRIVE=8;  // W low
+
+// ---- 6 on-board LEDs (breathe with each phase's duty) ----
+IO_LOC  "led[0]" PIN_LED0;   IO_PORT "led[0]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[1]" PIN_LED1;   IO_PORT "led[1]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[2]" PIN_LED2;   IO_PORT "led[2]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[3]" PIN_LED3;   IO_PORT "led[3]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[4]" PIN_LED4;   IO_PORT "led[4]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "led[5]" PIN_LED5;   IO_PORT "led[5]" IO_TYPE=LVCMOS33 DRIVE=8;
