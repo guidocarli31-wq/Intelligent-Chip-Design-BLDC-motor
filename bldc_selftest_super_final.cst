@@ -1,0 +1,44 @@
+// ==========================================================================
+// bldc_selftest.cst  -- Gowin physical constraints for bldc_selftest_top
+//                       on the Sipeed Tang Primer 20K (Dock ext-board).
+//
+// CONFIRMED pins are from Sipeed's official docs (wiki + TangPrimer-20K-example
+// README + Dock LED tutorial):
+//     clk  = H11 (27 MHz oscillator)
+//     LEDs = L14, N16, N14   (dock user LEDs)
+// NOTE: no external reset pin -- the design uses an internal power-on reset,
+//       so we avoid T10 (a dedicated SSPI config pad that causes PR2017/PR2028).
+//
+// The 6 PWM outputs go to whatever GPIO/PMOD header you wire to the driver's
+// J2 ribbon -- those pin balls are YOUR choice from a free header, read from
+// the Dock schematic (dl.sipeed.com/shareURL/TANG/Primer_20K/02_Schematic).
+// They are marked TODO below. You do NOT need them for the LED-only test.
+// ==========================================================================
+
+// ---- 27 MHz clock (CONFIRMED: H11) ----
+IO_LOC  "clk_in"    H11;
+IO_PORT "clk_in"    IO_TYPE=LVCMOS33;
+
+// ---- (no reset pin: internal power-on reset only) ----
+
+// ---- 3 user LEDs = the 3 high-side phases; these BREATHE 120 deg apart ----
+// (CONFIRMED pins; dock LEDs are active-low, handled in RTL)
+IO_LOC  "led[0]"    L14;   IO_PORT "led[0]" IO_TYPE=LVCMOS33 DRIVE=8;  // U high
+IO_LOC  "led[1]"    N16;   IO_PORT "led[1]" IO_TYPE=LVCMOS33 DRIVE=8;  // V high
+IO_LOC  "led[2]"    N14;   IO_PORT "led[2]" IO_TYPE=LVCMOS33 DRIVE=8;  // W high
+
+// ==========================================================================
+// ---- 6 PWM outputs -> driver J2 ribbon (fill from Dock schematic) --------
+//   Replace each PIN_TODO_x with a real ball from a free GPIO/PMOD header.
+//   Map to the driver inputs:
+//     pwm_out[0]=U_high -> IN_H_A     pwm_out[1]=U_low -> IN_L_A
+//     pwm_out[2]=V_high -> IN_H_B     pwm_out[3]=V_low -> IN_L_B
+//     pwm_out[4]=W_high -> IN_H_C     pwm_out[5]=W_low -> IN_L_C
+//   Tip: in Gowin, Tools -> FloorPlanner lets you assign these graphically.
+// ==========================================================================
+// IO_LOC  "pwm_out[0]" PIN_TODO_0;   IO_PORT "pwm_out[0]" IO_TYPE=LVCMOS33 DRIVE=8;
+// IO_LOC  "pwm_out[1]" PIN_TODO_1;   IO_PORT "pwm_out[1]" IO_TYPE=LVCMOS33 DRIVE=8;
+// IO_LOC  "pwm_out[2]" PIN_TODO_2;   IO_PORT "pwm_out[2]" IO_TYPE=LVCMOS33 DRIVE=8;
+// IO_LOC  "pwm_out[3]" PIN_TODO_3;   IO_PORT "pwm_out[3]" IO_TYPE=LVCMOS33 DRIVE=8;
+// IO_LOC  "pwm_out[4]" PIN_TODO_4;   IO_PORT "pwm_out[4]" IO_TYPE=LVCMOS33 DRIVE=8;
+// IO_LOC  "pwm_out[5]" PIN_TODO_5;   IO_PORT "pwm_out[5]" IO_TYPE=LVCMOS33 DRIVE=8;
